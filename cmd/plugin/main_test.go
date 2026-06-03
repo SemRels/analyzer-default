@@ -15,17 +15,17 @@ import (
 func TestRunWritesAnalysisResult(t *testing.T) {
 	t.Parallel()
 
-	getenv := func(key string) string {
+	lookupEnv := func(key string) (string, bool) {
 		if key == "SEMREL_COMMITS" {
-			return `["fix: patch issue","feat: add feature"]`
+			return `["fix: patch issue","feat: add feature"]`, true
 		}
-		return ""
+		return "", false
 	}
 
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	code := run(&stdout, &stderr, getenv)
+	code := run(&stdout, &stderr, lookupEnv)
 
 	require.Equal(t, 0, code)
 	require.Empty(t, stderr.String())
@@ -41,7 +41,7 @@ func TestRunRejectsInvalidCommitJSON(t *testing.T) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	code := run(&stdout, &stderr, func(string) string { return `[` })
+	code := run(&stdout, &stderr, func(string) (string, bool) { return `[`, true })
 
 	require.Equal(t, 1, code)
 	require.Empty(t, stdout.String())
@@ -54,9 +54,29 @@ func TestRunAllowsMissingCommitEnv(t *testing.T) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 
-	code := run(&stdout, &stderr, func(string) string { return "" })
+	code := run(&stdout, &stderr, func(string) (string, bool) { return "", false })
 
 	require.Equal(t, 0, code)
 	require.Empty(t, stderr.String())
 	require.Contains(t, stdout.String(), "\"bump\":\"none\"")
+}
+
+func TestRunRejectsInvalidPatternConfig(t *testing.T) {
+	t.Parallel()
+
+	lookupEnv := func(key string) (string, bool) {
+		if key == "SEMREL_PLUGIN_MINOR_PATTERN" {
+			return `[`, true
+		}
+		return "", false
+	}
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	code := run(&stdout, &stderr, lookupEnv)
+
+	require.Equal(t, 1, code)
+	require.Empty(t, stdout.String())
+	require.Contains(t, stderr.String(), "SEMREL_PLUGIN_MINOR_PATTERN")
 }

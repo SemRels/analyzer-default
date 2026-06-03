@@ -17,18 +17,23 @@ plugins:
   - name: analyzer-default
     path: ~/.semrel/plugins/semrel-plugin-analyzer-default
     env:
-      SEMREL_PLUGIN_MINOR_PATTERN: "^feat(\\(.+\\))?:"
-      SEMREL_PLUGIN_PATCH_PATTERN: "^(fix|perf|refactor)(\\(.+\\))?:"
-      SEMREL_PLUGIN_MAJOR_PATTERN: "BREAKING CHANGE"
+      SEMREL_PLUGIN_MAJOR_PATTERNS: "BREAKING CHANGE,feat!"
+      SEMREL_PLUGIN_MINOR_PATTERNS: "^feat(\\(.+\\))?:,^feature(\\(.+\\))?:,^\\[feature\\]"
+      SEMREL_PLUGIN_PATCH_PATTERNS: "^(fix|perf)(\\(.+\\))?:,^bugfix(\\(.+\\))?:,^hotfix(\\(.+\\))?:"
 ```
+
+Use a comma-separated list to configure multiple regexes for the same bump level. Whitespace around each pattern is trimmed and the bump is triggered when any configured pattern matches. The singular `SEMREL_PLUGIN_*_PATTERN` variables remain supported for backward compatibility, and also accept comma-separated values. If both singular and plural forms are set, the plural form takes precedence.
 
 ## `SEMREL_PLUGIN_*` variables
 
 | Name | Required | Description | Default |
 | --- | --- | --- | --- |
-| `SEMREL_PLUGIN_MINOR_PATTERN` | Optional | Regular expression that marks a commit as minor. | None |
-| `SEMREL_PLUGIN_PATCH_PATTERN` | Optional | Regular expression that marks a commit as patch. | None |
-| `SEMREL_PLUGIN_MAJOR_PATTERN` | Optional | Regular expression that marks a commit as major. | None |
+| `SEMREL_PLUGIN_MINOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as minor. | Built-in `feat` matching |
+| `SEMREL_PLUGIN_PATCH_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as patch. | Built-in `fix` / `perf` matching |
+| `SEMREL_PLUGIN_MAJOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as major. | Built-in `BREAKING CHANGE` matching |
+| `SEMREL_PLUGIN_MINOR_PATTERN` | Optional | Backward-compatible singular form for minor matching. | Inherited from defaults unless set |
+| `SEMREL_PLUGIN_PATCH_PATTERN` | Optional | Backward-compatible singular form for patch matching. | Inherited from defaults unless set |
+| `SEMREL_PLUGIN_MAJOR_PATTERN` | Optional | Backward-compatible singular form for major matching. | Inherited from defaults unless set |
 
 ## `SEMREL_*` release context used
 
@@ -38,7 +43,7 @@ plugins:
 
 ## Example behavior
 
-The plugin evaluates commit messages against the configured patterns and returns the highest required bump level.
+The plugin evaluates commit messages against the configured patterns and returns the highest required bump level. For example, `SEMREL_PLUGIN_PATCH_PATTERNS="^fix,^bugfix,^hotfix"` matches any commit starting with `fix`, `bugfix`, or `hotfix`.
 
 ## License
 

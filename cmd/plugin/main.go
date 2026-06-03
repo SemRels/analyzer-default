@@ -13,11 +13,11 @@ import (
 )
 
 func main() {
-	os.Exit(run(os.Stdout, os.Stderr, os.Getenv))
+	os.Exit(run(os.Stdout, os.Stderr, os.LookupEnv))
 }
 
-func run(stdout, stderr io.Writer, getenv func(string) string) int {
-	raw := getenv("SEMREL_COMMITS")
+func run(stdout, stderr io.Writer, lookupEnv func(string) (string, bool)) int {
+	raw, _ := lookupEnv("SEMREL_COMMITS")
 
 	var commits []string
 	if raw != "" {
@@ -27,7 +27,13 @@ func run(stdout, stderr io.Writer, getenv func(string) string) int {
 		}
 	}
 
-	if err := json.NewEncoder(stdout).Encode(plugin.New().Analyze(commits)); err != nil {
+	analyzer, err := plugin.NewFromEnv(lookupEnv)
+	if err != nil {
+		fmt.Fprintln(stderr, "analyzer-default:", err)
+		return 1
+	}
+
+	if err := json.NewEncoder(stdout).Encode(analyzer.Analyze(commits)); err != nil {
 		fmt.Fprintln(stderr, "analyzer-default:", err)
 		return 1
 	}
