@@ -33,7 +33,10 @@ func run(stdout, stderr io.Writer, lookupEnv func(string) (string, bool)) int {
 		return 1
 	}
 
-	if err := json.NewEncoder(stdout).Encode(analyzer.Analyze(commits)); err != nil {
+	result := analyzer.Analyze(commits)
+	result.PluginSchemaVersion = plugin.PluginSchemaVersion
+
+	if err := json.NewEncoder(stdout).Encode(result); err != nil {
 		fmt.Fprintln(stderr, "analyzer-default:", err)
 		return 1
 	}

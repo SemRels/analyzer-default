@@ -33,6 +33,7 @@ func TestRunWritesAnalysisResult(t *testing.T) {
 	var result plugin.AnalysisResult
 	require.NoError(t, json.Unmarshal(stdout.Bytes(), &result))
 	require.Equal(t, plugin.BumpMinor, result.Bump)
+	require.Equal(t, plugin.PluginSchemaVersion, result.PluginSchemaVersion)
 }
 
 func TestRunRejectsInvalidCommitJSON(t *testing.T) {
@@ -59,6 +60,7 @@ func TestRunAllowsMissingCommitEnv(t *testing.T) {
 	require.Equal(t, 0, code)
 	require.Empty(t, stderr.String())
 	require.Contains(t, stdout.String(), "\"bump\":\"none\"")
+	require.Contains(t, stdout.String(), "\"plugin_schema_version\":1")
 }
 
 func TestRunRejectsInvalidPatternConfig(t *testing.T) {
