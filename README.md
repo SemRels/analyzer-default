@@ -1,6 +1,6 @@
 # analyzer-default
 
-[![Latest Release](https://img.shields.io/github/v/release/SemRels/analyzer-default?label=version\&color=blue)](https://github.com/SemRels/analyzer-default/releases/latest)
+[![Latest Release](https://img.shields.io/github/v/release/SemRels/analyzer-default?label=version&color=blue)](https://github.com/SemRels/analyzer-default/releases/latest)
 
 Determines the semantic version bump by matching commit messages with configurable regular expressions.
 
