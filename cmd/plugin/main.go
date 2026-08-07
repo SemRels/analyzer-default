@@ -22,14 +22,14 @@ func run(stdout, stderr io.Writer, lookupEnv func(string) (string, bool)) int {
 	var commits []string
 	if raw != "" {
 		if err := json.Unmarshal([]byte(raw), &commits); err != nil {
-			fmt.Fprintln(stderr, "analyzer-default: invalid SEMREL_COMMITS JSON:", err)
+			_, _ = fmt.Fprintln(stderr, "analyzer-default: invalid SEMREL_COMMITS JSON:", err)
 			return 1
 		}
 	}
 
 	analyzer, err := plugin.NewFromEnv(lookupEnv)
 	if err != nil {
-		fmt.Fprintln(stderr, "analyzer-default:", err)
+		_, _ = fmt.Fprintln(stderr, "analyzer-default:", err)
 		return 1
 	}
 
@@ -37,7 +37,7 @@ func run(stdout, stderr io.Writer, lookupEnv func(string) (string, bool)) int {
 	result.PluginSchemaVersion = plugin.PluginSchemaVersion
 
 	if err := json.NewEncoder(stdout).Encode(result); err != nil {
-		fmt.Fprintln(stderr, "analyzer-default:", err)
+		_, _ = fmt.Fprintln(stderr, "analyzer-default:", err)
 		return 1
 	}
 
