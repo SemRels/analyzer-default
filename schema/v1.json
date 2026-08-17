@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://registry.semrel.io/schemas/plugins/analyzer-default/v1.json",
+  "$id": "https://registry.semrel.io/schemas/plugins/default/v1.json",
   "title": "analyzer-default plugin configuration",
   "description": "Schema v1 for the analyzer-default semrel plugin. Configure via SEMREL_* environment variables.",
   "type": "object",
