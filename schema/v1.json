@@ -4,6 +4,7 @@
   "title": "analyzer-default plugin configuration",
   "description": "Schema v1 for the analyzer-default semrel plugin. Configure via SEMREL_* environment variables.",
   "type": "object",
+  "x-semrel-dry-run": true,
   "properties": {
     "SEMREL_PLUGIN_MAJOR_PATTERNS": {
       "type": "string",
