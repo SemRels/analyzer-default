@@ -1,6 +1,6 @@
 # Code of Conduct
 
-analyzer-default is committed to providing a welcoming and harassment-free community.
+`analyzer-default` is committed to providing a welcoming and harassment-free community.
 
 ## Our Pledge
 
