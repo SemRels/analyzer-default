@@ -39,26 +39,27 @@ cosign verify ghcr.io/semrels/analyzer-default:latest \
 
 ```yaml
 plugins:
-  - name: analyzer-default
-    path: ~/.semrel/plugins/semrel-plugin-analyzer-default
-    env:
-      SEMREL_PLUGIN_MAJOR_PATTERNS: "BREAKING CHANGE,feat!"
-      SEMREL_PLUGIN_MINOR_PATTERNS: "^feat(\\(.+\\))?:,^feature(\\(.+\\))?:,^\\[feature\\]"
-      SEMREL_PLUGIN_PATCH_PATTERNS: "^(fix|perf)(\\(.+\\))?:,^bugfix(\\(.+\\))?:,^hotfix(\\(.+\\))?:"
+  - uses: "@semrel/analyzer-default"
+    args:
+      major_patterns: "BREAKING CHANGE,feat!"
+      minor_patterns: "^feat(\\(.+\\))?:,^feature(\\(.+\\))?:,^\\[feature\\]"
+      patch_patterns: "^(fix|perf)(\\(.+\\))?:,^bugfix(\\(.+\\))?:,^hotfix(\\(.+\\))?:"
 ```
 
 Use a comma-separated list to configure multiple regexes for the same bump level. Whitespace around each pattern is trimmed and the bump is triggered when any configured pattern matches. The singular `SEMREL_PLUGIN_*_PATTERN` variables remain supported for backward compatibility, and also accept comma-separated values. If both singular and plural forms are set, the plural form takes precedence.
 
-## `SEMREL_PLUGIN_*` variables
+## Options
 
-| Name | Required | Description | Default |
-| --- | --- | --- | --- |
-| `SEMREL_PLUGIN_MINOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as minor. | Built-in `feat` matching |
-| `SEMREL_PLUGIN_PATCH_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as patch. | Built-in `fix` / `perf` matching |
-| `SEMREL_PLUGIN_MAJOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as major. | Built-in `BREAKING CHANGE` matching |
-| `SEMREL_PLUGIN_MINOR_PATTERN` | Optional | Backward-compatible singular form for minor matching. | Inherited from defaults unless set |
-| `SEMREL_PLUGIN_PATCH_PATTERN` | Optional | Backward-compatible singular form for patch matching. | Inherited from defaults unless set |
-| `SEMREL_PLUGIN_MAJOR_PATTERN` | Optional | Backward-compatible singular form for major matching. | Inherited from defaults unless set |
+Every option can be set as an entry under `args` in `.semrel.yaml`. semrel passes each entry to the plugin as the environment variable shown in the table, so you can also set that variable directly (for example in your CI environment) instead of using `args`.
+
+| Argument | Environment variable | Required | Description | Default |
+| --- | --- | --- | --- | --- |
+| `minor_patterns` | `SEMREL_PLUGIN_MINOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as minor. | Built-in `feat` matching |
+| `patch_patterns` | `SEMREL_PLUGIN_PATCH_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as patch. | Built-in `fix` / `perf` matching |
+| `major_patterns` | `SEMREL_PLUGIN_MAJOR_PATTERNS` | Optional | Comma-separated regular expressions that mark a commit as major. | Built-in `BREAKING CHANGE` matching |
+| `minor_pattern` | `SEMREL_PLUGIN_MINOR_PATTERN` | Optional | Backward-compatible singular form for minor matching. | Inherited from defaults unless set |
+| `patch_pattern` | `SEMREL_PLUGIN_PATCH_PATTERN` | Optional | Backward-compatible singular form for patch matching. | Inherited from defaults unless set |
+| `major_pattern` | `SEMREL_PLUGIN_MAJOR_PATTERN` | Optional | Backward-compatible singular form for major matching. | Inherited from defaults unless set |
 
 ## `SEMREL_*` release context used
 
