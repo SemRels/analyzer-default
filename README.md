@@ -1,6 +1,10 @@
 # analyzer-default
 
 [![Latest Release](https://img.shields.io/github/v/release/SemRels/analyzer-default?label=version&color=blue)](https://github.com/SemRels/analyzer-default/releases/latest)
+[![CI](https://github.com/SemRels/analyzer-default/actions/workflows/ci.yml/badge.svg)](https://github.com/SemRels/analyzer-default/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/SemRels/analyzer-default)](LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/SemRels/analyzer-default/badge)](https://scorecard.dev/viewer/?uri=github.com/SemRels/analyzer-default)
+[![REUSE status](https://api.reuse.software/badge/github.com/SemRels/analyzer-default)](https://api.reuse.software/info/github.com/SemRels/analyzer-default)
 
 Determines the semantic version bump by matching commit messages with configurable regular expressions.
 
